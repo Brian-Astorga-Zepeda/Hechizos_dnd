@@ -202,4 +202,17 @@
           tabs.forEach(t => t.classList.remove('active'));
           tab.classList.add('active');
           const nivel = tab.getAttribute('data-tab').replace('nivel', '');
-          spellSections.forEach(s => s.classList.remove('a
+          spellSections.forEach(s => s.classList.remove('active'));
+          document.getElementById(`nivel${nivel}`).classList.add('active');
+          mostrarHechizos(classKey, nivel);
+        };
+      });
+    });
+
+    backBtn.addEventListener('click', () => {
+      viewer.style.display = 'none';
+      classSelector.style.display = 'grid';
+    });
+  </script>
+</body>
+</html>
