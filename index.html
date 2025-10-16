@@ -1,1 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visor de Hechizos DnD</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #1e1e2e;
+      color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .class-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+      width: 100%;
+      max-width: 700px;
+    }
+    .class-card {
+      background: #2b2b3b;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .class-card:hover {
+      background: #7c3aed;
+    }
+    .viewer {
+      display: none;
+      width: 100%;
+      max-width: 700px;
+    }
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .tab {
+      background: #2b2b3b;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .tab.active {
+      background: #7c3aed;
+    }
+    .spells {
+      display: none;
+      background: #2b2b3b;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    .spells.active {
+      display: block;
+    }
+    .spell {
+      margin-bottom: 10px;
+      border-bottom: 1px solid #444;
+      padding-bottom: 10px;
+    }
+    .spell:last-child {
+      border-bottom: none;
+    }
+    .back-btn {
+      background: #444;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      display: inline-block;
+      transition: 0.3s;
+    }
+    .back-btn:hover {
+      background: #7c3aed;
+    }
+  </style>
+</head>
+<body>
+  <h1>Visor de Hechizos DnD</h1>
+  <div id="classSelector" class="class-list">
+    <div class="class-card" data-class="bardo">Bardo</div>
+    <div class="class-card" data-class="clerigo">Clérigo</div>
+    <div class="class-card" data-class="druida">Druida</div>
+    <div class="class-card" data-class="hechicero">Hechicero</div>
+    <div class="class-card" data-class="mago">Mago</div>
+    <div class="class-card" data-class="paladin">Paladín</div>
+    <div class="class-card" data-class="guardabosques">Guardabosques</div>
+    <div class="class-card" data-class="brujo">Brujo</div>
+    <div class="class-card" data-class="artifice">Artífice</div>
+  </div>
 
+  <div id="viewer" class="viewer">
+    <div class="back-btn" id="backBtn">← Volver a clases</div>
+    <h2 id="classTitle">Clase</h2>
+    <div class="tabs" id="tabs">
+      <div class="tab active" data-tab="nivel0">Trucos</div>
+      <div class="tab" data-tab="nivel1">Nivel 1</div>
+      <div class="tab" data-tab="nivel2">Nivel 2</div>
+      <div class="tab" data-tab="nivel3">Nivel 3</div>
+      <div class="tab" data-tab="nivel4">Nivel 4</div>
+      <div class="tab" data-tab="nivel5">Nivel 5</div>
+      <div class="tab" data-tab="nivel6">Nivel 6</div>
+      <div class="tab" data-tab="nivel7">Nivel 7</div>
+      <div class="tab" data-tab="nivel8">Nivel 8</div>
+      <div class="tab" data-tab="nivel9">Nivel 9</div>
+    </div>
+
+    <div class="spells active" id="nivel0">
+      <div class="spell">
+        <strong>Luz</strong>
+        <p>Crea una luz mágica en un objeto.</p>
+      </div>
+    </div>
+
+    <div class="spells" id="nivel1">
+      <div class="spell">
+        <strong>Misil Mágico</strong>
+        <p>Crea dardos de energía mágica que golpean automáticamente.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const classSelector = document.getElementById('classSelector');
+    const viewer = document.getElementById('viewer');
+    const classTitle = document.getElementById('classTitle');
+    const backBtn = document.getElementById('backBtn');
+    const tabs = document.querySelectorAll('.tab');
+    const spellSections = document.querySelectorAll('.spells');
+
+    classSelector.addEventListener('click', (e) => {
+      const selected = e.target.closest('.class-card');
+      if (!selected) return;
+      classSelector.style.display = 'none';
+      viewer.style.display = 'block';
+      const className = selected.textContent;
+      classTitle.textContent = className;
+    });
+
+    backBtn.addEventListener('click', () => {
+      viewer.style.display = 'none';
+      classSelector.style.display = 'grid';
+    });
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const target = tab.getAttribute('data-tab');
+        spellSections.forEach(section => {
+          section.classList.remove('active');
+          if (section.id === target) section.classList.add('active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+s
