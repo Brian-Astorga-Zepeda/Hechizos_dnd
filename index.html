@@ -1,109 +1,48 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Visor de Hechizos DnD</title>
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #1e1e2e;
-      color: #f5f5f5;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    .class-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 15px;
-      width: 100%;
-      max-width: 700px;
-    }
-    .class-card {
-      background: #2b2b3b;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .class-card:hover {
-      background: #7c3aed;
-    }
-    .viewer {
-      display: none;
-      width: 100%;
-      max-width: 700px;
-    }
-    .tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .tab {
-      background: #2b2b3b;
-      padding: 10px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .tab.active {
-      background: #7c3aed;
-    }
-    .spells {
-      display: none;
-      background: #2b2b3b;
-      padding: 15px;
-      border-radius: 10px;
-    }
-    .spells.active {
-      display: block;
-    }
-    .spell {
-      margin-bottom: 10px;
-      border-bottom: 1px solid #444;
-      padding-bottom: 10px;
-    }
-    .spell:last-child {
-      border-bottom: none;
-    }
-    .back-btn {
-      background: #444;
-      padding: 10px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-bottom: 20px;
-      display: inline-block;
-      transition: 0.3s;
-    }
-    .back-btn:hover {
-      background: #7c3aed;
-    }
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#0f1724;color:#e6eef8;padding:24px;min-height:100vh}
+    h1{margin:0 0 18px}
+    .class-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;max-width:900px;margin-bottom:18px}
+    .class-card{background:#1b2430;padding:18px;border-radius:10px;text-align:center;cursor:pointer;border:1px solid rgba(255,255,255,0.03);user-select:none}
+    .class-card:focus{outline:2px solid #7c3aed;outline-offset:2px}
+    .viewer{display:none;max-width:900px}
+    .back-btn{display:inline-block;margin-bottom:12px;padding:8px 12px;border-radius:8px;background:#151a24;cursor:pointer}
+    .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+    .tab{padding:8px 10px;border-radius:8px;background:#121622;cursor:pointer;border:1px solid rgba(255,255,255,0.02)}
+    .tab.active{background:linear-gradient(90deg,#7c3aed,#4f46e5);color:white;border-color:rgba(124,58,237,0.4)}
+    .spells{background:#0b1220;padding:12px;border-radius:10px}
+    .spell{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03)}
+    .spell:last-child{border-bottom:none}
+    .small{color:#9aa4b2;font-size:13px}
+    @media (max-width:720px){body{padding:12px}}
   </style>
 </head>
 <body>
   <h1>Visor de Hechizos DnD</h1>
-  <div id="classSelector" class="class-list">
-    <div class="class-card" data-class="bardo">Bardo</div>
-    <div class="class-card" data-class="clerigo">Clérigo</div>
-    <div class="class-card" data-class="druida">Druida</div>
-    <div class="class-card" data-class="hechicero">Hechicero</div>
-    <div class="class-card" data-class="mago">Mago</div>
-    <div class="class-card" data-class="paladin">Paladín</div>
-    <div class="class-card" data-class="guardabosques">Guardabosques</div>
-    <div class="class-card" data-class="brujo">Brujo</div>
-    <div class="class-card" data-class="artifice">Artífice</div>
+
+  <!-- Pantalla de selección de clase -->
+  <div id="classSelector" class="class-list" aria-label="Selecciona clase">
+    <div class="class-card" data-class="mago" tabindex="0">Mago</div>
+    <div class="class-card" data-class="hechicero" tabindex="0">Hechicero</div>
+    <div class="class-card" data-class="brujo" tabindex="0">Brujo</div>
+    <div class="class-card" data-class="clerigo" tabindex="0">Clérigo</div>
+    <div class="class-card" data-class="druida" tabindex="0">Druida</div>
+    <div class="class-card" data-class="bardo" tabindex="0">Bardo</div>
+    <div class="class-card" data-class="paladin" tabindex="0">Paladín</div>
+    <div class="class-card" data-class="guardabosques" tabindex="0">Guardabosques</div>
+    <div class="class-card" data-class="artifice" tabindex="0">Artífice</div>
   </div>
 
-  <div id="viewer" class="viewer">
+  <!-- Visor por clase -->
+  <div id="viewer" class="viewer" role="region" aria-live="polite">
     <div class="back-btn" id="backBtn">← Volver a clases</div>
     <h2 id="classTitle">Clase</h2>
+
     <div class="tabs" id="tabs">
       <div class="tab active" data-tab="nivel0">Trucos</div>
       <div class="tab" data-tab="nivel1">Nivel 1</div>
@@ -117,104 +56,151 @@
       <div class="tab" data-tab="nivel9">Nivel 9</div>
     </div>
 
-    <div class="spells active" id="nivel0"></div>
-    <div class="spells" id="nivel1"></div>
-    <div class="spells" id="nivel2"></div>
-    <div class="spells" id="nivel3"></div>
-    <div class="spells" id="nivel4"></div>
-    <div class="spells" id="nivel5"></div>
-    <div class="spells" id="nivel6"></div>
-    <div class="spells" id="nivel7"></div>
-    <div class="spells" id="nivel8"></div>
-    <div class="spells" id="nivel9"></div>
+    <div id="spellsContainer" class="spells" aria-label="Lista de hechizos">
+      <!-- El contenido se inyecta por JS -->
+      <p class="small">Cargando hechizos...</p>
+    </div>
   </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-  const spellsData = {
-    mago: {
-      0: [
-        { nombre: "Luz", descripcion: "Crea una luz mágica en un objeto." },
-        { nombre: "Prestidigitación", descripcion: "Trucos menores de magia." }
-      ],
-      1: [
-        { nombre: "Misil Mágico", descripcion: "Crea dardos de energía mágica que golpean automáticamente." },
-        { nombre: "Escudo", descripcion: "Aumenta tu CA y bloquea misiles mágicos." }
-      ]
-    },
-    clerigo: {
-      0: [
-        { nombre: "Guía", descripcion: "Añade un d4 a una tirada de habilidad." },
-        { nombre: "Luz Sagrada", descripcion: "Pequeño destello radiante." }
-      ],
-      1: [
-        { nombre: "Curar Heridas", descripcion: "Recupera puntos de vida a una criatura tocada." },
-        { nombre: "Bendecir", descripcion: "Otorga bonificaciones a las tiradas de ataque y salvación." }
-      ]
-    },
-    druida: {
-      0: [
-        { nombre: "Llama Producida", descripcion: "Creas una pequeña llama en tu mano." }
-      ],
-      1: [
-        { nombre: "Curar Heridas", descripcion: "Recupera puntos de vida de una criatura tocada." },
-        { nombre: "Niebla", descripcion: "Crea una niebla ligera que bloquea la visión." }
-      ]
-    }
-  };
+<script>
+/* ---------- Datos de ejemplo (agrega aquí tus hechizos) ---------- */
+const spellsData = {
+  mago: {
+    0: [
+      { nombre: "Luz", descripcion: "Crea una luz mágica en un objeto." },
+      { nombre: "Prestidigitación", descripcion: "Pequeños trucos mágicos para efectos menores." }
+    ],
+    1: [
+      { nombre: "Misil Mágico", descripcion: "Crea dardos de energía que golpean automáticamente." },
+      { nombre: "Escudo", descripcion: "Aumenta temporalmente tu CA." }
+    ]
+  },
+  clerigo: {
+    0: [{ nombre: "Luz Sagrada", descripcion: "Un pequeño destello radiante." }],
+    1: [{ nombre: "Curar Heridas", descripcion: "Recupera puntos de vida." }]
+  },
+  druida: {
+    0: [{ nombre: "Llama Producida", descripcion: "Creas una pequeña llama en tu mano." }],
+    1: [{ nombre: "Niebla", descripcion: "Crea niebla ligera que bloquea visión." }]
+  },
+  hechicero: { /* ejemplo vacío intencional */ },
+  bardo: {},
+  brujo: {},
+  paladin: {},
+  guardabosques: {},
+  artifice: {}
+};
 
+/* ---------- Lógica UI ---------- */
+document.addEventListener('DOMContentLoaded', () => {
   const classSelector = document.getElementById('classSelector');
   const viewer = document.getElementById('viewer');
   const classTitle = document.getElementById('classTitle');
   const backBtn = document.getElementById('backBtn');
-  const tabs = document.querySelectorAll('.tab');
-  const spellSections = document.querySelectorAll('.spells');
+  const tabs = Array.from(document.querySelectorAll('.tab'));
+  const spellsContainer = document.getElementById('spellsContainer');
 
-  function mostrarHechizos(clase, nivel) {
-    const container = document.getElementById(`nivel${nivel}`);
-    container.innerHTML = "";
-    const hechizos = spellsData[clase]?.[nivel] || [];
-    if (hechizos.length === 0) {
-      container.innerHTML = "<p>No hay hechizos en este nivel.</p>";
+  let currentClassKey = null;
+  let currentLevel = '0';
+
+  // Funcion que renderiza los hechizos de clase+nivel
+  function renderSpellsFor(classKey, nivel) {
+    currentClassKey = classKey;
+    currentLevel = String(nivel);
+    console.log('[renderSpellsFor] clase=', classKey, 'nivel=', nivel);
+
+    const hechizos = spellsData[classKey]?.[nivel] || [];
+    spellsContainer.innerHTML = ''; // limpiar
+
+    const titulo = document.createElement('div');
+    titulo.className = 'small';
+    titulo.textContent = `Hechizos de ${capitalize(classKey)} — Nivel ${nivel}`;
+    spellsContainer.appendChild(titulo);
+
+    if (!hechizos.length) {
+      const p = document.createElement('p');
+      p.className = 'small';
+      p.textContent = 'No hay hechizos en este nivel.';
+      spellsContainer.appendChild(p);
       return;
     }
-    hechizos.forEach(spell => {
-      const div = document.createElement("div");
-      div.classList.add("spell");
-      div.innerHTML = `<strong>${spell.nombre}</strong><p>${spell.descripcion}</p>`;
-      container.appendChild(div);
+
+    hechizos.forEach(h => {
+      const el = document.createElement('div');
+      el.className = 'spell';
+      el.innerHTML = `<strong>${escapeHtml(h.nombre)}</strong><div class="small">${escapeHtml(h.descripcion)}</div>`;
+      spellsContainer.appendChild(el);
     });
   }
 
-  classSelector.addEventListener('click', (e) => {
-    const selected = e.target.closest('.class-card');
-    if (!selected) return;
-    classSelector.style.display = 'none';
-    viewer.style.display = 'block';
+  // Agregar listeners a cada tarjeta de clase (más robusto que delegación aquí)
+  const classCards = Array.from(document.querySelectorAll('.class-card'));
+  classCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const classKey = card.dataset.class;
+      console.log('[click classCard]', classKey);
+      openViewerFor(classKey, card.textContent.trim());
+    });
 
-    const classKey = selected.dataset.class;
-    const className = selected.textContent;
-    classTitle.textContent = className;
-
-    mostrarHechizos(classKey, 0);
-
-    tabs.forEach(tab => {
-      tab.onclick = () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        const nivel = tab.getAttribute('data-tab').replace('nivel', '');
-        spellSections.forEach(s => s.classList.remove('active'));
-        document.getElementById(`nivel${nivel}`).classList.add('active');
-        mostrarHechizos(classKey, nivel);
-      };
+    // soporte para teclado (Enter)
+    card.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault();
+        card.click();
+      }
     });
   });
+
+  function openViewerFor(classKey, classLabel) {
+    classSelector.style.display = 'none';
+    viewer.style.display = 'block';
+    classTitle.textContent = classLabel || capitalize(classKey);
+
+    // reset tabs to level 0 active
+    tabs.forEach(t => t.classList.remove('active'));
+    const t0 = tabs.find(t => t.dataset.tab === 'nivel0');
+    if (t0) t0.classList.add('active');
+
+    // mostrar hechizos nivel 0
+    renderSpellsFor(classKey, '0');
+  }
 
   backBtn.addEventListener('click', () => {
     viewer.style.display = 'none';
     classSelector.style.display = 'grid';
+    currentClassKey = null;
+    currentLevel = '0';
   });
+
+  // listeners para tabs
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      if (!currentClassKey) {
+        // por seguridad: si no hay clase seleccionada, ignorar o mostrar mensaje
+        console.warn('No class selected yet; ignoring tab click.');
+        return;
+      }
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const nivel = tab.dataset.tab.replace('nivel','');
+      renderSpellsFor(currentClassKey, nivel);
+    });
+  });
+
+  // Helper: capitalizar
+  function capitalize(s){ if(!s) return s; return s.charAt(0).toUpperCase()+s.slice(1); }
+
+  // Helper: escape para seguridad mínima (evita inyección accidental)
+  function escapeHtml(str){
+    if(!str) return '';
+    return String(str).replace(/[&<>"']/g, function(m){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]);
+    });
+  }
+
+  // Mensaje inicial
+  console.log('Visor de Hechizos listo. Haz clic en una clase.');
 });
-  </script>
+</script>
 </body>
 </html>
