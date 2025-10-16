@@ -117,22 +117,51 @@
       <div class="tab" data-tab="nivel9">Nivel 9</div>
     </div>
 
-    <div class="spells active" id="nivel0">
-      <div class="spell">
-        <strong>Luz</strong>
-        <p>Crea una luz mágica en un objeto.</p>
-      </div>
-    </div>
-
-    <div class="spells" id="nivel1">
-      <div class="spell">
-        <strong>Misil Mágico</strong>
-        <p>Crea dardos de energía mágica que golpean automáticamente.</p>
-      </div>
-    </div>
+    <div class="spells active" id="nivel0"></div>
+    <div class="spells" id="nivel1"></div>
+    <div class="spells" id="nivel2"></div>
+    <div class="spells" id="nivel3"></div>
+    <div class="spells" id="nivel4"></div>
+    <div class="spells" id="nivel5"></div>
+    <div class="spells" id="nivel6"></div>
+    <div class="spells" id="nivel7"></div>
+    <div class="spells" id="nivel8"></div>
+    <div class="spells" id="nivel9"></div>
   </div>
 
   <script>
+    const spellsData = {
+      mago: {
+        0: [
+          { nombre: "Luz", descripcion: "Crea una luz mágica en un objeto." },
+          { nombre: "Prestidigitación", descripcion: "Trucos menores de magia." }
+        ],
+        1: [
+          { nombre: "Misil Mágico", descripcion: "Crea dardos de energía mágica que golpean automáticamente." },
+          { nombre: "Escudo", descripcion: "Aumenta tu CA y bloquea misiles mágicos." }
+        ]
+      },
+      clerigo: {
+        0: [
+          { nombre: "Guía", descripcion: "Añade un d4 a una tirada de habilidad." },
+          { nombre: "Luz Sagrada", descripcion: "Pequeño destello radiante." }
+        ],
+        1: [
+          { nombre: "Curar Heridas", descripcion: "Recupera puntos de vida a una criatura tocada." },
+          { nombre: "Bendecir", descripcion: "Otorga bonificaciones a las tiradas de ataque y salvación." }
+        ]
+      },
+      druida: {
+        0: [
+          { nombre: "Llama Producida", descripcion: "Creas una pequeña llama en tu mano." }
+        ],
+        1: [
+          { nombre: "Curar Heridas", descripcion: "Recupera puntos de vida de una criatura tocada." },
+          { nombre: "Niebla", descripcion: "Crea una niebla ligera que bloquea la visión." }
+        ]
+      }
+    };
+
     const classSelector = document.getElementById('classSelector');
     const viewer = document.getElementById('viewer');
     const classTitle = document.getElementById('classTitle');
@@ -140,31 +169,37 @@
     const tabs = document.querySelectorAll('.tab');
     const spellSections = document.querySelectorAll('.spells');
 
+    function mostrarHechizos(clase, nivel) {
+      const container = document.getElementById(`nivel${nivel}`);
+      container.innerHTML = "";
+      const hechizos = spellsData[clase]?.[nivel] || [];
+      if (hechizos.length === 0) {
+        container.innerHTML = "<p>No hay hechizos en este nivel.</p>";
+        return;
+      }
+      hechizos.forEach(spell => {
+        const div = document.createElement("div");
+        div.classList.add("spell");
+        div.innerHTML = `<strong>${spell.nombre}</strong><p>${spell.descripcion}</p>`;
+        container.appendChild(div);
+      });
+    }
+
     classSelector.addEventListener('click', (e) => {
       const selected = e.target.closest('.class-card');
       if (!selected) return;
       classSelector.style.display = 'none';
       viewer.style.display = 'block';
+
+      const classKey = selected.dataset.class;
       const className = selected.textContent;
       classTitle.textContent = className;
-    });
 
-    backBtn.addEventListener('click', () => {
-      viewer.style.display = 'none';
-      classSelector.style.display = 'grid';
-    });
+      mostrarHechizos(classKey, 0);
 
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        const target = tab.getAttribute('data-tab');
-        spellSections.forEach(section => {
-          section.classList.remove('active');
-          if (section.id === target) section.classList.add('active');
-        });
-      });
-    });
-  </script>
-</body>
-</html>
+      tabs.forEach(tab => {
+        tab.onclick = () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const nivel = tab.getAttribute('data-tab').replace('nivel', '');
+          spellSections.forEach(s => s.classList.remove('a
